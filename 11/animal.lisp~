@@ -1,3 +1,0 @@
-(defun random-animal ()
-  (nth (random 5) '("dog" "tick" "tiger" "walrus" "kangaroo")))
-
