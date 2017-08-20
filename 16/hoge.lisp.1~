@@ -1,0 +1,4 @@
+(defun add (a b)
+  (let ((x (+ a b)))
+    (format t "The sum is ~a" x)
+    x))

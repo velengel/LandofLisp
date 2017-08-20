@@ -1,0 +1,9 @@
+(defun dot-name (exp)
+  (substitute-if #\_ (complement #'alphanumericp) (prin1-to-string exp)))
+dot-name
+(dot-name 'living-room)
+"living_room"
+(dot-name 'foo)
+"foo"
+(dot-name 'foo!)
+"foo_"

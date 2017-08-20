@@ -1,0 +1,3 @@
+(define-condition foo () ()
+  (:report (lambda (condition stream)
+	     (princ "Stop FOOing aroundm numbskull!" stream))))
