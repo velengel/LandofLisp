@@ -1,0 +1,6 @@
+(defmacro three-way-if (expr a b &rest c)
+  (let ((val (gensym)))
+    `(let ((,val ,expr))
+       (cond ((and (numberp ,val) (zerop ,val)) ,a)
+	     ((not ,val) ,@c)
+	     (t ,b)))))
