@@ -55,6 +55,9 @@
 (defparameter *die-colors* '((255 63 63) (63 63 255)))
 
 (defun draw-board-svg (board chosen-tile legal-tiles)
+
+
+  
   (loop for y below *board-size*
     do (loop for x below *board-size*
 	 for pos = (+ x (* *board-size* y))
@@ -70,14 +73,18 @@
 	      (draw-tile-svg x y pos hex xx yy col chosen-tile)))))
 
 (defun make-game-link (pos)
-  (format nil "/game.html?choosen=~a" pos))
+  (format nil "/game.html?chosen=~a" pos))
 
 (defparameter *cur-game-tree* nil)
 (defparameter *from-tile* nil)
 
 (defun dod-request-handler (path header params)
   (if (equal path "game.html")
-      (progn (princ "<!doctype html>")
+      (progn
+	(princ "HTTP/1.1 200 OK")
+              (terpri)
+	(terpri)
+	(princ "<!doctype html>")
 	(tag center ()
 	     (princ "Welcome to DICE OF DOOM!")
 	     (tag br ())
@@ -101,6 +108,7 @@
   (setf *cur-game-tree* (game-tree (gen-board) 0 0 t)))
 
 (defun web-announce-winner (board)
+ 
   (fresh-line)
   (let ((w (winners board)))
     (if (> (length w) 1)
@@ -110,10 +118,14 @@
        (princ " play again")))
 
 (defun web-handle-human (pos)
+
+  
   (cond ((not pos) (princ "Please choose a hex to move from:"))
 	((eq pos 'pass) (setf *cur-game-tree*
 			      (cadr (lazy-car (caddr *cur-game-tree*))))
 	 (princ "Your reinforcements have been placed.")
+
+	 
 	 (tag a (href (make-game-link nil))
 	      (princ "continue")))
 	((not *from-tile*) (setf *from-tile* pos)
@@ -136,7 +148,7 @@
   (princ "The computer has moved. ")
   (tag script ()
        (princ
-	"window.setTimeout('window.location=\"game.html_chosen=NIL\"',5000)")))
+	"window.setTimeout('window.location=\"game.html?chosen=NIL\"',3000)")))
 
 (defun draw-dod-page (tree selected-tile)
   (svg *board-width*
@@ -149,5 +161,5 @@
 						      (when (eql (caar move)
 								 selected-tile)
 							(cadar move)))
-						    (caddr move))
+						    (caddr tree))
 				   (lazy-mapcar #'caar (caddr tree)))))))
